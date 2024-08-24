@@ -17,11 +17,11 @@ void mkdirs(int l, char* names[]) {
         i++;
     }
 }
-int init(int argc, char** argv) {
+void init(int argc, char* argv[]) {
     printf("Short: Running shortcut: %s.\n", argv[1]);
     if (argc < 3) {
         printf("Short: No arguments provided\n");
-        return 1;
+        exit(1);
     } else if (!strcmp(argv[2], "c") || !strcmp(argv[2], "C") || !strcmp(argv[2], "cpp") || !strcmp(argv[2], "CPP")) {
         printf("Short: Initializing C project\n");
         char* names[] = {"src", "include", "bin", "test", "lib"};
@@ -29,8 +29,21 @@ int init(int argc, char** argv) {
     } else {
         printf("Short: Unknown project type\n");
     }
-
-    return 0;
+}
+void code(int argc, char* argv[]) {
+    //system("start cmd /K \"cd /d C:\\ && dir && echo Hello, World!\"");
+    if (argc < 3) {
+        printf("Short: No arguments provided, opening Dev\n");
+        system("start cmd /K \"cd /d C:\\Users\\aarus\\Dev\\ && echo Short: Finished Running && code .\"");
+    } else if (!strcmp(argv[2], "jarvis") || !strcmp(argv[2], "Jarvis")) {
+        printf("Short: Opening Jarvis\n");
+        system("start cmd /K \"cd /d C:\\Users\\aarus\\Dev\\.py\\Jarvis\\ && echo Short: Finished Running && code .\"");
+    } else {
+        printf("Short: Opening project %s\n", argv[2]);
+        char project[100];
+        sprintf(project, "start cmd /K \"cd /d C:\\Users\\aarus\\Dev\\%s\\ && echo Short: Finished Running && code .\"", argv[2]);
+        system(project);
+    }
 }
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -39,9 +52,13 @@ int main(int argc, char* argv[]) {
     }
 
     if (!strcmp(argv[1], "init")) {
-        exit(init(argc, argv));
+        init(argc, argv);
+    } else if (!strcmp(argv[1], "code")) {
+        code(argc, argv);
+    } else {
+        printf("Short: Unknown command.\n");
     }
 
-    printf("Finished running.\n");
+    printf("Short: Finished running.\n");
     return 0;
 }
