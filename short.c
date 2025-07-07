@@ -74,16 +74,16 @@ void init(int argc, char* argv[]) {
 }
 void code(int argc, char* argv[]) {
     //system("start cmd /K \"cd /d C:\\ && dir && echo Hello, World!\"");
+    char project[256];
     if (argc < 3) {
         printf("Short: No arguments provided, opening Dev\n");
-        system("start cmd /K \"cd /d C:\\Users\\aarus\\Dev\\ && echo Short: Finished Running && code .\"");
+        sprintf(project, "start cmd /K \"cd /d %s\\Dev\\ && code . && echo Short: Finished Running\"", getenv("USERPROFILE"));
     } else {
         printf("Short: Opening project %s\n", argv[2]);
-        char project[100];
-        sprintf(project, "start cmd /K \"cd /d C:\\Users\\aarus\\Dev\\%s\\ && code . && echo Short: Finished Running\"", argv[2]);
-        system(project);
-        should_exit = 1;
+        sprintf(project, "start cmd /K \"cd /d %s\\Dev\\%s\\ && code . && echo Short: Finished Running\"", getenv("USERPROFILE"), argv[2]);
     }
+    system(project);
+    should_exit = 1;
 }
 int main(int argc, char* argv[]) {
     if (argc < 2) {
