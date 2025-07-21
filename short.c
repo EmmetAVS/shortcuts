@@ -10,9 +10,9 @@ void make_file(char* name) {
     FILE* file = fopen(name, "w");
     if (file) {
         fclose(file);
-        printf("Short: Successfully created file %s\n", name);
+        printf("short: successfully created file %s\n", name);
     } else {
-        printf("Short: Error creating file %s\n", name);
+        printf("short: error creating file %s\n", name);
     }
 }
 
@@ -21,9 +21,9 @@ void write_file(char* name, char* content) {
     if (file) {
         fprintf(file, "%s", content);
         fclose(file);
-        printf("Short: Successfully wrote to file %s\n", name);
+        printf("short: successfully wrote to file %s\n", name);
     } else {
-        printf("Short: Error writing to file %s\n", name);
+        printf("short: error writing to file %s\n", name);
     }
 }
 
@@ -41,18 +41,19 @@ void mkdirs(int l, char* names[]) {
         i++;
     }
 }
+
 void init(int argc, char* argv[]) {
-    printf("Short: Running shortcut: %s.\n", argv[1]);
+    printf("short: running shortcut: %s.\n", argv[1]);
     const char* type = argv[2];
     if (argc < 3) {
-        printf("Short: No arguments provided\n");
+        printf("short: no arguments provided\n");
         exit(1);
     } else if (!strcmp(type, "c") || !strcmp(type, "C") || !strcmp(type, "cpp") || !strcmp(type, "CPP")) {
-        printf("Short: Initializing C project\n");
+        printf("short: Initializing C project\n");
         char* names[] = {"src", "include", "bin", "test", "lib"};
         mkdirs(5, names);
     } else if (!strcmp(type, "fastapi") || !strcmp(type, "FastAPI") || !strcmp(type, "webapp")) {
-        printf("Short: Initializing Python webapp project\n");
+        printf("short: Initializing Python webapp project\n");
         char* names[] = {"static", "static/styles", "static/assets", "static/scripts", "templates"};
         char* content = "from fastapi import FastAPI"
         "\nfrom fastapi import Cookie"
@@ -69,25 +70,27 @@ void init(int argc, char* argv[]) {
         write_file("main.py", content);
         mkdirs(5, names);
     } else {
-        printf("Short: Unknown project type\n");
+        printf("short: Unknown project type\n");
     }
 }
+
 void code(int argc, char* argv[]) {
     //system("start cmd /K \"cd /d C:\\ && dir && echo Hello, World!\"");
     char project[256];
     if (argc < 3) {
-        printf("Short: No arguments provided, opening Dev\n");
-        sprintf(project, "start cmd /K \"cd /d %s\\Dev\\ && code . && echo Short: Finished Running\"", getenv("USERPROFILE"));
+        printf("short: No arguments provided, opening Dev\n");
+        sprintf(project, "start cmd /K \"cd /d %s\\Dev\\ && code . && echo short: Finished Running\"", getenv("USERPROFILE"));
     } else {
-        printf("Short: Opening project %s\n", argv[2]);
-        sprintf(project, "start cmd /K \"cd /d %s\\Dev\\%s\\ && code . && echo Short: Finished Running\"", getenv("USERPROFILE"), argv[2]);
+        printf("short: Opening project %s\n", argv[2]);
+        sprintf(project, "start cmd /K \"cd /d %s\\Dev\\%s\\ && code . && echo short: Finished Running\"", getenv("USERPROFILE"), argv[2]);
     }
     system(project);
     should_exit = 1;
 }
+
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        printf("Short: No arguments provided.\n");
+        printf("short: no arguments provided.\n");
         return 1;
     }
 
@@ -96,10 +99,8 @@ int main(int argc, char* argv[]) {
     } else if (!strcmp(argv[1], "code")) {
         code(argc, argv);
     } else {
-        printf("Short: Unknown command.\n");
+        printf("short: unknown command.\n");
     }
-
-    printf("Short: Finished running.\n");
 
     should_exit ? system("exit") : (void)0; 
     return 0;
