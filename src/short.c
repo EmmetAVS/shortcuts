@@ -3,8 +3,9 @@
 #include <string.h>
 #include <direct.h>
 #include <windows.h>
+#include "cmd.h"
 
-int should_exit;
+int success;
 
 void make_file(char* name) {
     FILE* file = fopen(name, "w");
@@ -74,20 +75,6 @@ void init(int argc, char* argv[]) {
     }
 }
 
-void code(int argc, char* argv[]) {
-    //system("start cmd /K \"cd /d C:\\ && dir && echo Hello, World!\"");
-    char project[256];
-    if (argc < 3) {
-        printf("short: No arguments provided, opening Dev\n");
-        sprintf(project, "start cmd /K \"cd /d %s\\Dev\\ && code . && echo short: Finished Running\"", getenv("USERPROFILE"));
-    } else {
-        printf("short: Opening project %s\n", argv[2]);
-        sprintf(project, "start cmd /K \"cd /d %s\\Dev\\%s\\ && code . && echo short: Finished Running\"", getenv("USERPROFILE"), argv[2]);
-    }
-    system(project);
-    should_exit = 1;
-}
-
 int main(int argc, char* argv[]) {
     if (argc < 2) {
         printf("short: no arguments provided.\n");
@@ -97,11 +84,13 @@ int main(int argc, char* argv[]) {
     if (!strcmp(argv[1], "init")) {
         init(argc, argv);
     } else if (!strcmp(argv[1], "code")) {
-        code(argc, argv);
+        success = code_cmd(argc, argv);
     } else {
-        printf("short: unknown command.\n");
+        printf("short: '%s' is not a short command.\n", argv[1]);
     }
 
-    should_exit ? system("exit") : (void)0; 
+    if (success) {
+        system("exit");
+    }
     return 0;
 }
