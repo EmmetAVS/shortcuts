@@ -1,8 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <direct.h>
-#include <windows.h>
+#ifdef _WIN32
+    #include <direct.h>
+    #include <windows.h>
+
+    #define MAKEDIR(name) _mkdir(name)
+#else
+    #include <sys/stat.h>
+    #define MAKEDIR(name) mkdir(name, 0777)
+#endif
+#include <dirent.h>
 #include "cmd.h"
 
 int success;
@@ -32,7 +40,7 @@ void mkdirs(int l, char* names[]) {
     int i = 0;
     while (i < l) {
         char* name = names[i];
-        int result = _mkdir(name);
+        int result = MAKEDIR(name);
 
         if (result == 0) {
             printf("Short: Successfully created directory with name %s\n", name);
@@ -76,6 +84,7 @@ void init(int argc, char* argv[]) {
 }
 
 int main(int argc, char* argv[]) {
+    
     if (argc < 2) {
         printf("short: no arguments provided.\n");
         return 1;

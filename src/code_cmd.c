@@ -7,7 +7,14 @@
 #include <sys/stat.h>
 #include "utils.h"
 
-static char *find_dir_path_rec(const char *base_path, const char *dir_entry) {
+const int max_depth = 5;
+
+static char *find_dir_path_rec(const char *base_path, const char *dir_entry, int depth) {
+    
+    if (depth >= max_depth) {
+        return NULL;
+    }
+
     struct dirent *de;
     struct stat st;
 
@@ -36,7 +43,7 @@ static char *find_dir_path_rec(const char *base_path, const char *dir_entry) {
         }
 
         if (S_ISDIR(st.st_mode)) {
-            char *sub_path = find_dir_path_rec(full_path, dir_entry);
+            char *sub_path = find_dir_path_rec(full_path, dir_entry, depth + 1);
             if (sub_path != NULL) {
                 free(full_path);
                 return sub_path;
@@ -59,7 +66,7 @@ int code_cmd(int argc, char* argv[]) {
     } else {
 
         char *base_path = safe_snprintf("%s\\Dev", getenv("USERPROFILE"));
-        char *dir_path = find_dir_path_rec(base_path, argv[2]);
+        char *dir_path = find_dir_path_rec(base_path, argv[2], 0);
         free(base_path);
 
         if (dir_path == NULL) {
@@ -70,6 +77,7 @@ int code_cmd(int argc, char* argv[]) {
         printf("short: Opening project %s\n", argv[2]);
         project = safe_snprintf("start cmd /K \"cd /d %s && code . && echo short: Finished Running\"", dir_path);
     }
+    printf("project opening: %s\n", project);
     system(project);
     free(project);
 
