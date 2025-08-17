@@ -9,7 +9,9 @@
 
 const int max_depth = 5;
 
-static char *find_dir_path_rec(const char *base_path, const char *dir_entry, int depth) {
+static char *find_dir_path_rec(char *base_path, const char *dir_entry, int depth) {
+
+    lower(base_path);
     
     if (depth >= max_depth) {
         return NULL;
@@ -26,6 +28,8 @@ static char *find_dir_path_rec(const char *base_path, const char *dir_entry, int
 
     while ((de = readdir(dr)) != NULL) {
         char *full_path = safe_snprintf("%s\\%s", base_path, de->d_name);
+        lower(de->d_name);
+        lower(full_path);
 
         if (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0) {
             free(full_path);
@@ -66,6 +70,7 @@ int code_cmd(int argc, char* argv[]) {
     } else {
 
         char *base_path = safe_snprintf("%s\\Dev", getenv("USERPROFILE"));
+        lower(argv[2]);
         char *dir_path = find_dir_path_rec(base_path, argv[2], 0);
         free(base_path);
 

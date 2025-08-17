@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <ctype.h>
 
 char *safe_snprintf(const char *format, ...) {
 
@@ -18,4 +19,12 @@ char *safe_snprintf(const char *format, ...) {
     buffer[written] = '\0';
 
     return buffer;
+}
+
+void lower(char *s) {
+    char *p = s;
+    while (*p != '\0') {
+        *p = tolower(*p);
+        p++;
+    }
 }
